@@ -1,13 +1,7 @@
 import React from 'react'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import options from './Config'
 
-const options = {
-    method: 'GET',
-    headers: {
-        'X-RapidAPI-Key': process.env.REACT_APP_APIKEY,
-		'X-RapidAPI-Host': process.env.REACT_APP_APIHOST
-    }
-};
 
 
 console.log(options);
@@ -21,15 +15,16 @@ function QuoteBox() {
     });
     
     function handleClick() {
-        setQuote({
-            quote:{
-            text:"There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is.",
-            author:"Albert Einstein"
-            }
-        })
+        // setQuote({
+        //     quote:{
+        //     text:"There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is.",
+        //     author:"Albert Einstein"
+        //     }
+        // })
+        newQuotes();
     };
-    
-    useEffect(()=>{
+
+    const newQuotes = useCallback(()=>{
         fetch('https://quotes15.p.rapidapi.com/quotes/random/?language_code=en', options)
         .then(response => response.json())
         .then((response) => {
@@ -42,7 +37,11 @@ function QuoteBox() {
             });
         })
         .catch(err => console.error(err));
-    },[]);
+    },[])
+    
+    useEffect(()=>{
+        newQuotes();
+    },[newQuotes]);
     
       return (
     <div id="quote-box">
