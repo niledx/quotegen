@@ -1,18 +1,20 @@
 import React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import options from './Config'
-
-
-
-console.log(options);
+import Loader from './Loader';
 
 function QuoteBox() {
     const [quote, setQuote] = useState({
+        // quote:{
+        //     text:"The most beautiful moments in life are moments when you are expressing your joy, not when you are seeking it.",
+        //     author:"Sadhguru"
+        // }, 
         quote:{
-            text:"The most beautiful moments in life are moments when you are expressing your joy, not when you are seeking it.",
-            author:"Sadhguru"
+            text:"",
+            author:""
         },
     });
+    const [IsLoaded, setIsLoaded] = useState(false);
     
     function handleClick() {
         // setQuote({
@@ -25,6 +27,7 @@ function QuoteBox() {
     };
 
     const newQuotes = useCallback(()=>{
+        setIsLoaded(false);
         fetch('https://quotes15.p.rapidapi.com/quotes/random/?language_code=en', options)
         .then(response => response.json())
         .then((response) => {
@@ -35,22 +38,23 @@ function QuoteBox() {
                     author: response.originator.name
                 }
             });
+            setIsLoaded(true);
         })
         .catch(err => console.error(err));
     },[])
-    
+
     useEffect(()=>{
         newQuotes();
     },[newQuotes]);
     
-      return (
-    <div id="quote-box">
-        <p id="text">{quote.quote.text}</p>
-        <span id="author">{quote.quote.author}</span>
-        <a href="twitter.com/intent/tweet" id="tweet-quote">Tweet</a>
-        <button id="new-quote" onClick={handleClick}>Next</button>
-    </div>
-  )
+    return (
+        <div id="quote-box">
+            { IsLoaded ? <><p id="text">{quote.quote.text}</p>
+            <span id="author">{quote.quote.author}</span>
+            <a href="twitter.com/intent/tweet" id="tweet-quote">Tweet</a>
+            <button id="new-quote" onClick={handleClick}>Next</button></> : <Loader/>}
+        </div>
+      )
 }
 
 export default QuoteBox
