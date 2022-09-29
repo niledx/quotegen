@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect, useCallback } from 'react';
 import options from './Config'
 import Loader from './Loader';
+import Twitter from '../twitter.png'
 
 function QuoteBox() {
     const [quote, setQuote] = useState({
@@ -49,9 +50,9 @@ function QuoteBox() {
     
     return (
         <div id="quote-box">
-            { IsLoaded ? <><p id="text">{quote.quote.text}</p>
-            <span id="author">{quote.quote.author}</span>
-            <a href="twitter.com/intent/tweet" id="tweet-quote">Tweet</a>
+            { IsLoaded ? <><div><p id="text">{quote.quote.text}</p>
+            <span id="author">{quote.quote.author}</span></div>
+            <a href="twitter.com/intent/tweet" id="tweet-quote"><img src={Twitter} alt="Tweet" id='tweet' /></a>
             <button id="new-quote" onClick={handleClick}>Next</button></> : <Loader/>}
         </div>
       )
